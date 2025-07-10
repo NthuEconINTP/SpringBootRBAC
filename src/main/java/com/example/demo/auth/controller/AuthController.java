@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.auth.dto.RegisterRequest;
+import com.example.demo.auth.exception.UsernameAlreadyExistsException;
 import com.example.demo.auth.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
+    	try {
             userService.register(request);
             return ResponseEntity.ok("User registered successfully");
-        } catch (RuntimeException ex) {
+        } catch (UsernameAlreadyExistsException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         } catch (Exception ex) {
-        	 ex.printStackTrace(); // 印出錯誤到 console
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
         }
     }

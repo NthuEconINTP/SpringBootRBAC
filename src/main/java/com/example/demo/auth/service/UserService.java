@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.auth.dao.UserRepository;
 import com.example.demo.auth.dto.RegisterRequest;
+import com.example.demo.auth.exception.UsernameAlreadyExistsException;
 import com.example.demo.auth.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,8 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void register(RegisterRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+    	if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already exists");
         }
 
         User user = new User();

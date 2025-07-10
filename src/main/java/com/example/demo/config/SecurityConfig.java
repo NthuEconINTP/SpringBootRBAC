@@ -18,19 +18,16 @@ public class SecurityConfig {
         http
             // 關閉 CSRF（API 用）
             .csrf(csrf -> csrf.disable())
-
             // 設定授權規則
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/register", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // 註冊與Swagger放行
                 .anyRequest().authenticated() // 其他路徑都需驗證
             )
-
             // 設定 session 為無狀態（JWT）
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             // 你可能還會加入 JWT Filter，這邊就先不示範了
             ;
-
         return http.build();
     }
 
